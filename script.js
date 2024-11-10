@@ -6,40 +6,45 @@ const holdDice = document.getElementById('btn--hold');
 const newGame = document.getElementById('btn--new');
 const dice = document.getElementById('dice');
 
-let score = 0;
-let activePlayer = 1;
-let playerScores = [0, 0];
+let score, activePlayer, playerScores, playing;
+
+newRound();
 
 rollDice.addEventListener('click', function () {
-  // Generate the random number
-  const diceNumber = Math.floor(Math.random() * 5 + 1);
+  if (playing) {
+    // Generate the random number
+    const diceNumber = Math.floor(Math.random() * 5 + 1);
 
-  // Display the dice with the generated number
-  dice.classList.remove('hidden');
-  dice.src = `images/dice-${diceNumber}.png`;
+    // Display the dice with the generated number
+    dice.classList.remove('hidden');
+    dice.src = `images/dice-${diceNumber}.png`;
 
-  // Verify if the generated number is equal to 1
-  if (diceNumber !== 1) {
-    // Add the generated number to the score of the active player
-    score += diceNumber;
-    document.getElementById(`score--${activePlayer}`).textContent = score;
-  } else {
-    // Switch player
-    switchPlayer();
+    // Verify if the generated number is equal to 1
+    if (diceNumber !== 1) {
+      // Add the generated number to the score of the active player
+      score += diceNumber;
+      document.getElementById(`score--${activePlayer}`).textContent = score;
+    } else {
+      // Switch player
+      switchPlayer();
+    }
   }
 });
 
 holdDice.addEventListener('click', function () {
-  playerScores[activePlayer - 1] += score;
-  document.getElementById(`current--${activePlayer}`).textContent =
-    playerScores[activePlayer - 1];
+  if (playing) {
+    playerScores[activePlayer - 1] += score;
+    document.getElementById(`current--${activePlayer}`).textContent =
+      playerScores[activePlayer - 1];
 
-  if (playerScores[activePlayer - 1] >= 100) {
-    document
-      .getElementById(`player--${activePlayer}`)
-      .classList.add('player--winner');
-  } else {
-    switchPlayer();
+    if (playerScores[activePlayer - 1] >= 100) {
+      document
+        .getElementById(`player--${activePlayer}`)
+        .classList.add('player--winner');
+      playing = false;
+    } else {
+      switchPlayer();
+    }
   }
 });
 
@@ -59,6 +64,7 @@ function newRound() {
   score = 0;
   activePlayer = 1;
   playerScores = [0, 0];
+  playing = true;
 
   document.getElementById('current--1').textContent = 0;
   document.getElementById('current--2').textContent = 0;
