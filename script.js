@@ -6,13 +6,12 @@ const holdDice = document.getElementById('btn--hold');
 
 const dice = document.getElementById('dice');
 
-const currentScore1 = document.getElementById('current--1');
-const currentScore2 = document.getElementById('current--2');
 const player1 = document.getElementById('player--1');
 const player2 = document.getElementById('player--2');
 
 let score = 0;
 let activePlayer = 1;
+let playerScores = [0, 0];
 
 rollDice.addEventListener('click', function () {
   // Generate the random number
@@ -33,15 +32,28 @@ rollDice.addEventListener('click', function () {
   }
 });
 
+holdDice.addEventListener('click', function () {
+  playerScores[activePlayer - 1] += score;
+  document.getElementById(`current--${activePlayer}`).textContent =
+    playerScores[activePlayer - 1];
+
+  if (playerScores[activePlayer - 1] >= 100) {
+    document
+      .getElementById(`player--${activePlayer}`)
+      .classList.add('player--winner');
+  } else {
+    switchPlayer();
+  }
+});
+
 function switchPlayer() {
   score = 0;
   document.getElementById(`score--${activePlayer}`).textContent = 0;
+  document
+    .getElementById(`player--${activePlayer}`)
+    .classList.toggle('player--active');
   activePlayer = activePlayer === 1 ? 2 : 1;
-  if (activePlayer === 1) {
-    player2.classList.remove('player--active');
-    player1.classList.add('player--active');
-  } else {
-    player1.classList.remove('player--active');
-    player2.classList.add('player--active');
-  }
+  document
+    .getElementById(`player--${activePlayer}`)
+    .classList.toggle('player--active');
 }
