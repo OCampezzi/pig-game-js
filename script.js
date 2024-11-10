@@ -3,11 +3,8 @@
 // DOM elements
 const rollDice = document.getElementById('btn--roll');
 const holdDice = document.getElementById('btn--hold');
-
+const newGame = document.getElementById('btn--new');
 const dice = document.getElementById('dice');
-
-const player1 = document.getElementById('player--1');
-const player2 = document.getElementById('player--2');
 
 let score = 0;
 let activePlayer = 1;
@@ -57,3 +54,23 @@ function switchPlayer() {
     .getElementById(`player--${activePlayer}`)
     .classList.toggle('player--active');
 }
+
+function newRound() {
+  score = 0;
+  activePlayer = 1;
+  playerScores = [0, 0];
+
+  document.getElementById('current--1').textContent = 0;
+  document.getElementById('current--2').textContent = 0;
+  document.getElementById('score--1').textContent = 0;
+  document.getElementById('score--2').textContent = 0;
+
+  document.getElementById('player--1').classList.remove('player--winner');
+  document.getElementById('player--2').classList.remove('player--winner');
+  document.getElementById('player--1').classList.add('player--active');
+  document.getElementById('player--2').classList.remove('player--active');
+
+  dice.classList.add('hidden');
+}
+
+newGame.addEventListener('click', newRound);
